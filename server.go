@@ -23,14 +23,14 @@ func SAMLServer(w http.ResponseWriter, r *http.Request) {
 		}
 		SAMLResponse := r.FormValue("SAMLResponse")
 		if len(SAMLResponse) == 0 {
-			log.Printf("SAMLResponse field is empty or not exists")
+			log.Printf("SAMLResponse field is empty or does not exist")
 			return
 		}
-		ioutil.WriteFile("saml-response.txt", []byte(url.QueryEscape(SAMLResponse)), 0600)
+		ioutil.WriteFile("/tmp/saml-response.txt", []byte(url.QueryEscape(SAMLResponse)), 0600)
 		fmt.Fprintf(w, "Got SAMLResponse field, it is now safe to close this window\n")
-		log.Printf("Got SAMLResponse field and saved it to the saml-response.txt file")
+		log.Printf("Got SAMLResponse field and saved it to /tmp/saml-response.txt file")
 		return
 	default:
-		fmt.Fprintf(w, "Error: POST method expected, %s recieved", r.Method)
+		fmt.Fprintf(w, "Error: POST method expected, %s received", r.Method)
 	}
 }

@@ -25,7 +25,7 @@ RAND=$(openssl rand -hex 12)
 SRV=$(dig a +short "${RAND}.${VPN_HOST}"|head -n1)
 
 # cleanup
-rm -f saml-response.txt
+rm -f /tmp/saml-response.txt
 
 echo "Getting SAML redirect URL from the AUTH_FAILED response (host: ${SRV}:${PORT})"
 OVPN_OUT=$($OVPN_BIN --config "${OVPN_CONF}" --verb 3 \
@@ -53,5 +53,5 @@ sudo bash -c "$OVPN_BIN --config "${OVPN_CONF}" \
     --verb 3 --auth-nocache --inactive 3600 \
     --proto "$PROTO" --remote $SRV $PORT \
     --script-security 2 \
-    --route-up '/bin/rm saml-response.txt' \
-    --auth-user-pass <( printf \"%s\n%s\n\" \"N/A\" \"CRV1::${VPN_SID}::$(cat saml-response.txt)\" )"
+    --route-up '/bin/rm /tmp/saml-response.txt' \
+    --auth-user-pass <( printf \"%s\n%s\n\" \"N/A\" \"CRV1::${VPN_SID}::$(cat /tmp/saml-response.txt)\" )"
